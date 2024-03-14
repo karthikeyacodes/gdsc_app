@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Blog extends StatefulWidget {
-  const Blog({super.key});
+  const Blog({super.key, required this.updateBlog});
+  final Function(String, String) updateBlog;
 
   @override
   State<Blog> createState() => _BlogState();
@@ -16,7 +17,7 @@ class _BlogState extends State<Blog> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Blog"),
+        title: const Text("Add Blog"),
         centerTitle: true,
       ),
       body: Column(children: [
@@ -26,41 +27,25 @@ class _BlogState extends State<Blog> {
               SizedBox(
                 width: 375.0,
                 child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter something";
-                    } else {
-                      title = value;
-                      return null;
-                    }
-                  },
                   controller: titleController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Blog Title",
                     border: OutlineInputBorder(),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10.0,
               ),
               SizedBox(
                 width: 375.0,
                 height: 350.0,
                 child: TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter something";
-                    } else {
-                      description = value;
-                      return null;
-                    }
-                  },
                   controller: descriptionController,
                   maxLines: null,
                   expands: true,
-                  decoration: InputDecoration(
-                    hintText: "Blog Description",
+                  decoration: const InputDecoration(
+                    labelText: "Blog Description",
                     border: OutlineInputBorder(),
                     // filled: true.
                   ),
@@ -71,22 +56,21 @@ class _BlogState extends State<Blog> {
         ),
         Expanded(
           child: Container(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pop(context, {
-                    'title': titleController.text,
-                    'description': descriptionController.text,
-                  });
+                  widget.updateBlog(
+                      titleController.text, descriptionController.text);
+                  Navigator.pop(context, true);
                 },
-                child: Text("Add Post"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.cyan,
                   foregroundColor: Colors.black,
                   minimumSize: const Size.fromHeight(50),
                 ),
+                child: const Text("Add Post"),
               ),
             ),
           ),

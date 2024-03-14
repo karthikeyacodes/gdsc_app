@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:gdsc_app/components/blog_card.dart';
 import 'package:gdsc_app/components/blog_page.dart';
 
 class Home extends StatefulWidget {
@@ -14,9 +15,13 @@ class _HomeState extends State<Home> {
   bool isSwitched = false;
   String title = '';
   String description = '';
+  List<String> titleList = [];
+  List<String> descriptionList = [];
 
   void updateBlogDetails(String newTitle, String newDescription) {
     setState(() {
+      titleList.add(newTitle);
+      descriptionList.add(newDescription);
       title = newTitle;
       description = newDescription;
     });
@@ -98,25 +103,19 @@ class _HomeState extends State<Home> {
           ],
         )),
       ),
-      // body: Column(
-      //   mainAxisAlignment: MainAxisAlignment.center,
-      //   children: [
-      //     Text('Title: $title'),
-      //     SizedBox(height: 10),
-      //     Text('Description: $description'),
-      //     SizedBox(height: 20),
-      //   ],
-      // ),
+      body: ListView.builder(
+        itemCount: titleList.length,
+        itemBuilder: ((context, index) {
+          return BlogCard(
+              title: titleList[index], description: descriptionList[index]);
+        }),
+      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Blog()),
-          );
-
-          if (result != null) {
-            updateBlogDetails(result['title'], result['description']);
-          }
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Blog(updateBlog: updateBlogDetails)));
         },
         child: Icon(Icons.edit),
         backgroundColor: Colors.cyan,
