@@ -3,6 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:gdsc_app/components/blog_card.dart';
 import 'package:gdsc_app/components/blog_page.dart';
+import 'package:gdsc_app/components/profile_page.dart';
+import 'package:gdsc_app/components/user_provider.dart';
+import 'package:gdsc_app/main.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -29,12 +33,18 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: Text("Hello User!"),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.account_circle))
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ProfileEditPage()));
+              },
+              icon: Icon(Icons.account_circle))
         ],
       ),
       drawer: Drawer(
@@ -44,13 +54,13 @@ class _HomeState extends State<Home> {
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(color: Colors.cyan),
               accountName: Text(
-                "User",
+                user.username,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               accountEmail: Text(
-                "user@gmail.com",
+                user.email,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -62,11 +72,10 @@ class _HomeState extends State<Home> {
               children: [
                 Switch(
                   activeColor: Colors.black,
-                  value: isSwitched,
+                  value: themeNotifier.value == ThemeMode.dark,
                   onChanged: (value) {
-                    setState(() {
-                      isSwitched = value;
-                    });
+                    themeNotifier.value =
+                        value ? ThemeMode.dark : ThemeMode.light;
                   },
                 ),
                 Padding(padding: EdgeInsets.all(10.0)),
@@ -119,6 +128,7 @@ class _HomeState extends State<Home> {
         },
         child: Icon(Icons.edit),
         backgroundColor: Colors.cyan,
+        foregroundColor: Colors.black,
         elevation: 10.0,
       ),
     );

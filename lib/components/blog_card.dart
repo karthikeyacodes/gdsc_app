@@ -17,11 +17,18 @@ class BlogCard extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            leading: Icon(Icons.notes_rounded),
-            title: Text(title),
+            leading: Icon(
+              Icons.notes_rounded,
+              color: Colors.black,
+            ),
+            title: Text(
+              title,
+              style: TextStyle(color: Colors.black),
+            ),
             subtitle: Text(
               description,
               maxLines: 1,
+              style: TextStyle(color: Colors.black),
             ),
             onTap: () {
               Navigator.push(
